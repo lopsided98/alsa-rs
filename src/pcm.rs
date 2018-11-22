@@ -769,6 +769,15 @@ impl<'a> SwParams<'a> {
         acheck!(snd_pcm_sw_params_get_avail_min(self.0, &mut v)).map(|_| v as Frames)
     }
 
+    pub fn set_period_event(&self, val: bool) -> Result<()> {
+        acheck!(snd_pcm_sw_params_set_period_event((self.1).0, self.0, if val { 1 } else { 0 })).map(|_| ())
+    }
+
+    pub fn get_period_event(&self) -> Result<bool> {
+        let mut v = 0;
+        acheck!(snd_pcm_sw_params_get_period_event(self.0, &mut v)).map(|_| v != 0)
+    }
+
     pub fn get_boundary(&self) -> Result<Frames> {
         let mut v = 0;
         acheck!(snd_pcm_sw_params_get_boundary(self.0, &mut v)).map(|_| v as Frames)
