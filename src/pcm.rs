@@ -647,6 +647,12 @@ impl<'a> HwParams<'a> {
         acheck!(snd_pcm_hw_params_set_periods((self.1).0, self.0, v as c_uint, dir as c_int)).map(|_| ())
     }
 
+    pub fn set_periods_near(&self, v: u32, dir: ValueOr) -> Result<u32> {
+        let mut d = dir as c_int;
+        let mut r = v as c_uint;
+        acheck!(snd_pcm_hw_params_set_periods_near((self.1).0, self.0, &mut r, &mut d)).map(|_| r as u32)
+    }
+
     pub fn get_periods(&self) -> Result<u32> {
         let (mut v, mut d) = (0,0);
         acheck!(snd_pcm_hw_params_get_periods(self.0, &mut v, &mut d)).map(|_| v as u32)
