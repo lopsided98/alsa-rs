@@ -169,6 +169,11 @@ impl PCM {
         acheck!(snd_pcm_avail_delay(self.0, &mut a, &mut d)).map(|_| (a, d))
     }
 
+    pub fn delay(&self) -> Result<Frames> {
+        let mut d = 0;
+        acheck!(snd_pcm_delay(self.0, &mut d)).map(|_| d)
+    }
+
     pub fn status(&self) -> Result<Status> {
         let z = Status::new();
         acheck!(snd_pcm_status(self.0, z.ptr())).map(|_| z)
